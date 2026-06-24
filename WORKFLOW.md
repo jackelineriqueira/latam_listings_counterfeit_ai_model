@@ -10,29 +10,29 @@ Pipeline diário automatizado de detecção de produtos falsificados no marketpl
 
 ```mermaid
 flowchart TD
-    subgraph FONTES["📥 Fontes"]
-        P1[(latam_bi.counterfeit_lm_daily\nMAX grass_date)]
-        GS1[(Google Sheets\nWhitelist de marcas)]
+    subgraph FONTES[Fontes]
+        P1[(counterfeit_lm_daily)]
+        GS1[(Sheets: whitelist de marcas)]
     end
 
-    subgraph PROC["⚙️ Processamento — 5 Bots Paralelos"]
-        B["Download imagens\nimage1 + image2"]
-        C["Encode base64\ndetecção media type"]
-        D["GPT-4o-mini\nprompt v6 · detail:low\n→ brand_detected ou –"]
-        LF["🔍 Langfuse\ntrace · tokens · latência"]
+    subgraph PROC[Processamento - 5 Bots Paralelos]
+        B[Download imagens]
+        C[Encode base64]
+        D[GPT-4o-mini / prompt v6 / detail:low]
+        LF([Langfuse: trace + tokens])
         B --> C --> D
         D -.->|trace| LF
     end
 
-    subgraph SAIDAS["📤 Saídas"]
-        P2[(latam_bi.counterfeit_ia_results_daily\nDELETE + INSERT · grass_date)]
-        CSV[CSV Backup\nia_counterfeit_mvp_YYYYMMDD.csv]
-        GS2[(Google Sheets\naba resultados_ia)]
+    subgraph SAIDAS[Saidas]
+        P2[(counterfeit_ia_results_daily)]
+        CSV[CSV Backup]
+        GS2[(Sheets: resultados_ia)]
     end
 
-    ST["📣 SeatTalk\nmétricas do dia + link Sheets"]
+    ST[SeatTalk: metricas + link Sheets]
 
-    P1 -->|~5k itens/dia| B
+    P1 -->|5k itens/dia| B
     GS1 -->|marcas aceitas| D
     D --> P2
     D --> CSV
