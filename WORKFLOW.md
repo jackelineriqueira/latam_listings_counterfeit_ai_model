@@ -33,7 +33,7 @@ flowchart TD
     ST[SeatTalk: metricas + link Sheets]
 
     P1 -->|5k itens/dia| B
-    GS1 -->|marcas aceitas| D
+    GS1 -->|marcas a detectar| D
     D --> P2
     D --> CSV
     D --> GS2
@@ -137,6 +137,7 @@ flowchart TD
 
 - **Fonte:** Google Sheets — ID `1ybLpCUTHyXYouss981KyEayIspkHMuU0Na2Nu9brMG0`, aba `brands`
 - **Coluna lida:** `Brand`
+- **Conteúdo:** marcas monitoradas por suspeita de falsificação — o modelo deve identificar se o item imita alguma delas
 - **Deduplicação:** `drop_duplicates()` aplicado antes de montar a string para o prompt
 - **Auth:** service account `latam-bi@listings-counterfeit.iam.gserviceaccount.com`
 
