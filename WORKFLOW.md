@@ -6,6 +6,44 @@ Pipeline diário automatizado de detecção de produtos falsificados no marketpl
 
 ---
 
+## Fluxograma
+
+```mermaid
+flowchart TD
+    subgraph FONTES["📥 Fontes"]
+        P1[(latam_bi.counterfeit_lm_daily\nMAX grass_date)]
+        GS1[(Google Sheets\nWhitelist de marcas)]
+    end
+
+    subgraph PROC["⚙️ Processamento — 5 Bots Paralelos"]
+        B["Download imagens\nimage1 + image2"]
+        C["Encode base64\ndetecção media type"]
+        D["GPT-4o-mini\nprompt v6 · detail:low\n→ brand_detected ou –"]
+        LF["🔍 Langfuse\ntrace · tokens · latência"]
+        B --> C --> D
+        D -.->|trace| LF
+    end
+
+    subgraph SAIDAS["📤 Saídas"]
+        P2[(latam_bi.counterfeit_ia_results_daily\nDELETE + INSERT · grass_date)]
+        CSV[CSV Backup\nia_counterfeit_mvp_YYYYMMDD.csv]
+        GS2[(Google Sheets\naba resultados_ia)]
+    end
+
+    ST["📣 SeatTalk\nmétricas do dia + link Sheets"]
+
+    P1 -->|~5k itens/dia| B
+    GS1 -->|marcas aceitas| D
+    D --> P2
+    D --> CSV
+    D --> GS2
+    P2 --> ST
+    GS2 --> ST
+    CSV --> ST
+```
+
+---
+
 ## Configuração de Produção
 
 | Parâmetro | Valor |
