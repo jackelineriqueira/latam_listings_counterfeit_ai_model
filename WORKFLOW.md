@@ -174,7 +174,7 @@ Para cada item:
 ## Agendamento
 
 - **Plataforma:** Shopee Notebook 2 (K8S)
-- **Frequência:** diária
+- **Frequência:** Semanal
 - **Timezone:** `America/Sao_Paulo`
 - **Variável injetada:** `${SCHEDULED_DATE}` (formato `YYYYMMDD`) — usada apenas para referência, não para queries Presto
 
